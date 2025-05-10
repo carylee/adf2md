@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/cary/adf2md/pkg/adf2md"
+	"github.com/carylee/adf2md/pkg/adf2md"
 )
 
 func main() {
