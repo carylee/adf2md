@@ -15,6 +15,7 @@ builds:
       - linux
       - windows
       - darwin
+    main: ./cmd/adf2md
 
 archives:
   - formats:
