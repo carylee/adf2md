@@ -1,12 +1,11 @@
+# .goreleaser.yaml
 version: 2
 
 project_name: adf2md
 
 before:
   hooks:
-    # You may remove this if you don't use go modules.
     - go mod tidy
-    # you may remove this if you don't need go generate
     - go generate ./...
 
 builds:
@@ -18,7 +17,8 @@ builds:
       - darwin
 
 archives:
-  - format: tar.gz
+  - formats:
+      - tar.gz
     name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
@@ -26,10 +26,10 @@ archives:
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
-    # use zip for windows archives
     format_overrides:
       - goos: windows
-        format: zip
+        formats:
+          - zip
 
 changelog:
   sort: asc
@@ -39,8 +39,7 @@ changelog:
       - "^test:"
 
 brews:
-  -
-    name: adf2md
+  - name: adf2md
     commit_author:
       name: carylee
       email: carylee@gmail.com
@@ -52,7 +51,6 @@ brews:
       bin.install "adf2md"
     test: |
       system "#{bin}/adf2md --version"
-    # Repository to push the generated files to.
     repository:
       owner: carylee
       name: homebrew-adf2md
