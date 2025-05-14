@@ -11,20 +11,38 @@ import (
 	"github.com/carylee/adf2md/pkg/adf2md"
 )
 
+const (
+	version = "0.1.4"
+)
+
 func main() {
 	// Define command-line flags
-	inputFile := flag.String("file", "", "Input file containing ADF JSON (default: stdin)")
-	outputFile := flag.String("output", "", "Output file for Markdown (default: stdout)")
-	listIndent := flag.Int("indent", 2, "Number of spaces used for list item indentation")
+	var (
+		showVersion bool
+		inputFile   string
+		outputFile  string
+	)
+
+	flag.BoolVar(&showVersion, "v", false, "Print version information")
+	flag.StringVar(&inputFile, "i", "", "Input file containing ADF JSON (default: stdin)")
+	flag.StringVar(&outputFile, "o", "", "Output file for Markdown (default: stdout)")
+	
+	// Parse flags
 	flag.Parse()
+
+	// Handle version flag
+	if showVersion {
+		fmt.Printf("adf2md version %s\n", version)
+		os.Exit(0)
+	}
 
 	// Get input content
 	var input []byte
 	var err error
 	
-	if *inputFile != "" {
+	if inputFile != "" {
 		// Read from file
-		input, err = os.ReadFile(*inputFile)
+		input, err = os.ReadFile(inputFile)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error reading input file: %v\n", err)
 			os.Exit(1)
@@ -50,9 +68,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Convert to Markdown
+	// Convert to Markdown with default indent of 2
 	renderer := adf2md.NewRenderer().WithOptions(adf2md.RenderOptions{
-		ListIndent: *listIndent,
+		ListIndent: 2,
 	})
 	
 	markdown, err := renderer.RenderToMarkdown(node)
@@ -62,8 +80,8 @@ func main() {
 	}
 
 	// Write output
-	if *outputFile != "" {
-		err = os.WriteFile(*outputFile, []byte(markdown), 0644)
+	if outputFile != "" {
+		err = os.WriteFile(outputFile, []byte(markdown), 0644)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error writing output file: %v\n", err)
 			os.Exit(1)
