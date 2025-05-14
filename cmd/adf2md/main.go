@@ -2,13 +2,13 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"io"
 	"os"
 	"strings"
 
 	"github.com/carylee/adf2md/pkg/adf2md"
+	"github.com/spf13/pflag"
 )
 
 const (
@@ -23,12 +23,24 @@ func main() {
 		outputFile  string
 	)
 
-	flag.BoolVar(&showVersion, "v", false, "Print version information")
-	flag.StringVar(&inputFile, "i", "", "Input file containing ADF JSON (default: stdin)")
-	flag.StringVar(&outputFile, "o", "", "Output file for Markdown (default: stdout)")
+	pflag.BoolVarP(&showVersion, "version", "v", false, "Print version information")
+	pflag.StringVarP(&inputFile, "input", "i", "", "Input file containing ADF JSON (default: stdin)")
+	pflag.StringVarP(&outputFile, "output", "o", "", "Output file for Markdown (default: stdout)")
+	
+	// Add help flag explicitly
+	help := pflag.BoolP("help", "h", false, "Show help information")
 	
 	// Parse flags
-	flag.Parse()
+	pflag.Parse()
+	
+	// Show help if requested
+	if *help {
+		fmt.Printf("adf2md - Convert Atlassian Document Format (ADF) JSON to Markdown\n\n")
+		fmt.Printf("Usage: adf2md [options] [json-string]\n\n")
+		fmt.Printf("Options:\n")
+		pflag.PrintDefaults()
+		os.Exit(0)
+	}
 
 	// Handle version flag
 	if showVersion {
@@ -49,8 +61,8 @@ func main() {
 		}
 	} else {
 		// Check if there's extra argument as content
-		if flag.NArg() > 0 {
-			input = []byte(flag.Arg(0))
+		if pflag.NArg() > 0 {
+			input = []byte(pflag.Arg(0))
 		} else {
 			// Read from stdin
 			input, err = readStdin()
