@@ -3,7 +3,7 @@ package adf2md_test
 import (
 	"testing"
 
-	"github.com/cary/adf2md/pkg/adf2md"
+	"github.com/carylee/adf2md/pkg/adf2md"
 )
 
 func TestRenderer(t *testing.T) {
