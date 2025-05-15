@@ -11,9 +11,23 @@ A Go command-line tool to convert Atlassian Document Format (ADF) JSON into Mark
 - Convert ADF JSON to clean, readable Markdown
 - Accept input from file, stdin, or command-line argument
 - Output to file or stdout
-- Configure list indentation
+- Simple, intuitive command-line interface
 
 ## Installation
+
+### Homebrew
+
+The easiest way to install `adf2md` is via Homebrew:
+
+```bash
+# Add the tap
+brew tap carylee/adf2md
+
+# Install the tool
+brew install adf2md
+```
+
+### Go Install
 
 If you have Go installed:
 
@@ -21,7 +35,9 @@ If you have Go installed:
 go install github.com/carylee/adf2md/cmd/adf2md@latest
 ```
 
-Alternatively, download a binary release from the GitHub releases page.
+### Binary Release
+
+Alternatively, download a binary release from the [GitHub releases page](https://github.com/carylee/adf2md/releases).
 
 ## Usage
 
@@ -30,16 +46,27 @@ Alternatively, download a binary release from the GitHub releases page.
 cat adf.json | adf2md
 
 # Read from a file
-adf2md -file input.json
+adf2md -i input.json
+# or with long form flag
+adf2md --input input.json
 
 # Write output to a file
-adf2md -file input.json -output result.md
+adf2md -i input.json -o result.md
+# or with long form flags
+adf2md --input input.json --output result.md
 
 # Pass ADF JSON directly as an argument
 adf2md '{"version":1,"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Hello world"}]}]}'
 
-# Configure list indentation (default: 2 spaces)
-adf2md -indent 4 -file input.json
+# Get version information
+adf2md -v
+# or
+adf2md --version
+
+# Show help
+adf2md -h
+# or
+adf2md --help
 ```
 
 ## Supported ADF Elements
